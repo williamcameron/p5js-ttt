@@ -22,11 +22,18 @@ function setup(){
 }
 
 function mouseClicked() {
-  move(floor((mouseX/150)*3), floor((mouseY/150)*3));
+  let moveX = floor((mouseX/150)*3);
+  let moveY = floor((mouseY/150)*3);
+  
+  if(board[moveY][moveX] == 0){
+    move(moveX, moveY);
+  }
+  
   
 }
 
 function move(x, y) {
+  //console.log('moving: '+x+','+y);
   board[y][x] = (currentplayer%2 + 1);
   currentplayer++;
 }
@@ -37,11 +44,81 @@ function draw(){
   drawBoard();
   if(currentplayer % 2 == 1){
     computerMove();    
+  } else {
+    // player move
+    computerMove();
   }
   checkForWin();
+  checkForDraw();
 }
 
-function checkForWin(){
+function checkForDraw() {
+  let empty = 0;
+  for(let i=0;i<3;i++){
+    for(let j=0;j<3; j++) {
+      if(board[i][j] == 0){
+        empty++;
+      }
+    }
+  }
+  
+  if(empty == 0) {
+    console.log('Draw!');
+    resetBoard();
+  }
+}
+
+function checkForWin() {
+  // Horizontals
+  if( (board[0][1] == board[0][0] && board[0][1] == board[0][2] && board[0][0] !== 0) ) {
+    console.log('Win: ' + (board[0][0]==1?"o":"x"));
+    resetBoard();
+  }
+  if ( (board[1][1] == board[1][0] && board[1][1] == board[1][2] && board[1][0] !== 0) ) {
+      console.log('Win: ' + (board[1][0]==1?"o":"x"));
+    resetBoard();
+      }
+  if ( (board[2][1] == board[2][0] && board[2][1] == board[2][2] && board[2][0] !== 0) ) {
+    console.log('Win: ' + (board[2][0]==1?"o":"x"));
+    resetBoard();
+  }
+  
+  // Verticals
+  if( (board[1][0] == board[0][0] && board[1][0] == board[2][0] && board[0][0] !== 0) ) {
+    console.log('Win: ' + (board[0][0]==1?"o":"x"));
+    resetBoard();
+  }
+  if ( (board[1][1] == board[0][1] && board[1][1] == board[2][1] && board[0][1] !== 0) ) {
+      console.log('Win: ' + (board[1][1]==1?"o":"x"));
+    resetBoard();
+      }
+  if ( (board[1][2] == board[0][2] && board[1][2] == board[2][2] && board[0][2] !== 0) ) {
+    console.log('Win: ' + (board[2][2]==1?"o":"x"));
+    resetBoard();
+  }
+  
+  // Diagonals
+  if( (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[1][1] !== 0) ) {
+    console.log('Win: ' + (board[1][1]==1?"o":"x"));
+    resetBoard();
+  }
+  if ( (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[1][1] !== 0) ) {
+      console.log('Win: ' + (board[1][1]==1?"o":"x"));
+    resetBoard();
+      }
+ 
+}
+
+function resetBoard(){
+  board[0][0] = 0;
+    board[0][1] = 0;
+    board[0][2] = 0;
+    board[1][0] = 0;
+    board[1][1] = 0;
+    board[1][2] = 0;
+    board[2][0] = 0;
+    board[2][1] = 0;
+    board[2][2] = 0;
   
 }
 function drawBoard() {
@@ -63,14 +140,32 @@ function drawBoard() {
   }
 }
 
-function computerMove(){
-      let computerY = floor(random(3));
-    let computerX = floor(random(3));
+function computerMove() {
+  // Get blanks
+  let empties = [];
+  for(let i=0;i<3;i++){
+    for(let j=0;j<3; j++) {
+      if(board[i][j] == 0){
+        empties.push([i,j]);
+      }
+    }
+  }
+  // pick random
+  //console.log(empties);
+  // play
+  let movee = empties[Math.floor(Math.random()*empties.length)];
+    //console.log(movee);
+    
+    let computerY = movee[0]; // floor(random(3));
+    let computerX = movee[1]; // floor(random(3));
+    // console.log(computerX);
     if(!board[computerY][computerX]){
+      //console.log('yes');
       move(computerX, computerY);
+    }else{
+      //console.log('no');
     }
 }
-      //# sourceURL=pen.js
     </script>
 
 </body>
