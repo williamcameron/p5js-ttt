@@ -1,172 +1,170 @@
 <html>
-<head></head>
+
+<head>
+    <title>Auto playing TicTacToe in P5.js</title>
+</head>
+
 <body>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.min.js'></script>
+    <script>
+        let board = [];
+        let currentplayer = 0;
 
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.min.js'></script>
+        function setup() {
+            createCanvas(150, 150);
+            for (let i = 0; i < 3; i++) {
+                board[i] = [];
+                for (let j = 0; j < 3; j++) {
+                    board[i][j] = 0;
+                }
+            }
+        }
 
-  
+        function mouseClicked() {
+            let moveX = floor((mouseX / 150) * 3);
+            let moveY = floor((mouseY / 150) * 3);
 
-    <script >
-      let board = [];
-let currentplayer = 0;
+            if (board[moveY][moveX] == 0) {
+                move(moveX, moveY);
+            }
 
 
-function setup(){
-  createCanvas(150, 150);
-  for(let i=0;i<3;i++){
-    board[i] = [];
-    for(let j=0;j<3; j++) {
-      board[i][j] = 0;
-    }
-  }
-}
+        }
 
-function mouseClicked() {
-  let moveX = floor((mouseX/150)*3);
-  let moveY = floor((mouseY/150)*3);
-  
-  if(board[moveY][moveX] == 0){
-    move(moveX, moveY);
-  }
-  
-  
-}
+        function move(x, y) {
+            board[y][x] = (currentplayer % 2 + 1);
+            currentplayer++;
+        }
 
-function move(x, y) {
-  //console.log('moving: '+x+','+y);
-  board[y][x] = (currentplayer%2 + 1);
-  currentplayer++;
-}
+        function draw() {
+            background(0);
+            stroke(255);
+            drawBoard();
+            if (currentplayer % 2 == 1) {
+                computerMove();
+            } else {
+                // player move
+                computerMove();
+            }
+            checkForWin();
+            checkForDraw();
+        }
 
-function draw(){
-  background(0);
-  stroke(255);
-  drawBoard();
-  if(currentplayer % 2 == 1){
-    computerMove();    
-  } else {
-    // player move
-    computerMove();
-  }
-  checkForWin();
-  checkForDraw();
-}
+        function checkForDraw() {
+            let empty = 0;
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    if (board[i][j] == 0) {
+                        empty++;
+                    }
+                }
+            }
 
-function checkForDraw() {
-  let empty = 0;
-  for(let i=0;i<3;i++){
-    for(let j=0;j<3; j++) {
-      if(board[i][j] == 0){
-        empty++;
-      }
-    }
-  }
-  
-  if(empty == 0) {
-    console.log('Draw!');
-    resetBoard();
-  }
-}
+            if (empty == 0) {
+                console.log('Draw!');
+                resetBoard();
+            }
+        }
 
-function checkForWin() {
-  // Horizontals
-  if( (board[0][1] == board[0][0] && board[0][1] == board[0][2] && board[0][0] !== 0) ) {
-    console.log('Win: ' + (board[0][0]==1?"o":"x"));
-    resetBoard();
-  }
-  if ( (board[1][1] == board[1][0] && board[1][1] == board[1][2] && board[1][0] !== 0) ) {
-      console.log('Win: ' + (board[1][0]==1?"o":"x"));
-    resetBoard();
-      }
-  if ( (board[2][1] == board[2][0] && board[2][1] == board[2][2] && board[2][0] !== 0) ) {
-    console.log('Win: ' + (board[2][0]==1?"o":"x"));
-    resetBoard();
-  }
-  
-  // Verticals
-  if( (board[1][0] == board[0][0] && board[1][0] == board[2][0] && board[0][0] !== 0) ) {
-    console.log('Win: ' + (board[0][0]==1?"o":"x"));
-    resetBoard();
-  }
-  if ( (board[1][1] == board[0][1] && board[1][1] == board[2][1] && board[0][1] !== 0) ) {
-      console.log('Win: ' + (board[1][1]==1?"o":"x"));
-    resetBoard();
-      }
-  if ( (board[1][2] == board[0][2] && board[1][2] == board[2][2] && board[0][2] !== 0) ) {
-    console.log('Win: ' + (board[2][2]==1?"o":"x"));
-    resetBoard();
-  }
-  
-  // Diagonals
-  if( (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[1][1] !== 0) ) {
-    console.log('Win: ' + (board[1][1]==1?"o":"x"));
-    resetBoard();
-  }
-  if ( (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[1][1] !== 0) ) {
-      console.log('Win: ' + (board[1][1]==1?"o":"x"));
-    resetBoard();
-      }
- 
-}
+        function checkForWin() {
+            // Horizontals
+            if ((board[0][1] == board[0][0] && board[0][1] == board[0][2] && board[0][0] !== 0)) {
+                console.log('Win: ' + (board[0][0] == 1 ? "o" : "x"));
+                resetBoard();
+            }
+            if ((board[1][1] == board[1][0] && board[1][1] == board[1][2] && board[1][0] !== 0)) {
+                console.log('Win: ' + (board[1][0] == 1 ? "o" : "x"));
+                resetBoard();
+            }
+            if ((board[2][1] == board[2][0] && board[2][1] == board[2][2] && board[2][0] !== 0)) {
+                console.log('Win: ' + (board[2][0] == 1 ? "o" : "x"));
+                resetBoard();
+            }
 
-function resetBoard(){
-  board[0][0] = 0;
-    board[0][1] = 0;
-    board[0][2] = 0;
-    board[1][0] = 0;
-    board[1][1] = 0;
-    board[1][2] = 0;
-    board[2][0] = 0;
-    board[2][1] = 0;
-    board[2][2] = 0;
-  
-}
-function drawBoard() {
-  line(0, 50, 150, 50);
-  line(0, 100, 150, 100);
-  line(50, 0, 50, 150);
-  line(100, 0, 100, 150);
-  
-  for(let i=0;i<board.length;i++) {
-   for(let j=0;j<board.length;j++) {
-     fill(0);
-     if(board[i][j] == "1"){
-        ellipse(25+(50*j),25+(50*i),40,40);
-     } else if(board[i][j] == "2") {
-       line(10+(50*j), 10+(50*i), 40+(50*j), 40+(50*i));
-       line(10+(50*j), 40+(50*i), 40+(50*j), 10+(50*i));
-     }
-  } 
-  }
-}
+            // Verticals
+            if ((board[1][0] == board[0][0] && board[1][0] == board[2][0] && board[0][0] !== 0)) {
+                console.log('Win: ' + (board[0][0] == 1 ? "o" : "x"));
+                resetBoard();
+            }
+            if ((board[1][1] == board[0][1] && board[1][1] == board[2][1] && board[0][1] !== 0)) {
+                console.log('Win: ' + (board[1][1] == 1 ? "o" : "x"));
+                resetBoard();
+            }
+            if ((board[1][2] == board[0][2] && board[1][2] == board[2][2] && board[0][2] !== 0)) {
+                console.log('Win: ' + (board[2][2] == 1 ? "o" : "x"));
+                resetBoard();
+            }
 
-function computerMove() {
-  // Get blanks
-  let empties = [];
-  for(let i=0;i<3;i++){
-    for(let j=0;j<3; j++) {
-      if(board[i][j] == 0){
-        empties.push([i,j]);
-      }
-    }
-  }
-  // pick random
-  //console.log(empties);
-  // play
-  let movee = empties[Math.floor(Math.random()*empties.length)];
-    //console.log(movee);
-    
-    let computerY = movee[0]; // floor(random(3));
-    let computerX = movee[1]; // floor(random(3));
-    // console.log(computerX);
-    if(!board[computerY][computerX]){
-      //console.log('yes');
-      move(computerX, computerY);
-    }else{
-      //console.log('no');
-    }
-}
+            // Diagonals
+            if ((board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[1][1] !== 0)) {
+                console.log('Win: ' + (board[1][1] == 1 ? "o" : "x"));
+                resetBoard();
+            }
+            if ((board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[1][1] !== 0)) {
+                console.log('Win: ' + (board[1][1] == 1 ? "o" : "x"));
+                resetBoard();
+            }
+
+        }
+
+        function resetBoard() {
+            board[0][0] = 0;
+            board[0][1] = 0;
+            board[0][2] = 0;
+            board[1][0] = 0;
+            board[1][1] = 0;
+            board[1][2] = 0;
+            board[2][0] = 0;
+            board[2][1] = 0;
+            board[2][2] = 0;
+
+        }
+
+        function drawBoard() {
+            line(0, 50, 150, 50);
+            line(0, 100, 150, 100);
+            line(50, 0, 50, 150);
+            line(100, 0, 100, 150);
+
+            for (let i = 0; i < board.length; i++) {
+                for (let j = 0; j < board.length; j++) {
+                    fill(0);
+                    if (board[i][j] == "1") {
+                        ellipse(25 + (50 * j), 25 + (50 * i), 40, 40);
+                    } else if (board[i][j] == "2") {
+                        line(10 + (50 * j), 10 + (50 * i), 40 + (50 * j), 40 + (50 * i));
+                        line(10 + (50 * j), 40 + (50 * i), 40 + (50 * j), 10 + (50 * i));
+                    }
+                }
+            }
+        }
+
+        function computerMove() {
+            // Get blanks
+            let empties = [];
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    if (board[i][j] == 0) {
+                        empties.push([i, j]);
+                    }
+                }
+            }
+            // pick random
+            // play
+            let movee = empties[Math.floor(Math.random() * empties.length)];
+
+            let computerY = movee[0]; // floor(random(3));
+            let computerX = movee[1]; // floor(random(3));
+            // console.log(computerX);
+            if (!board[computerY][computerX]) {
+                //console.log('yes');
+                move(computerX, computerY);
+            } else {
+                //console.log('no');
+            }
+        }
     </script>
 
 </body>
+
 </html>
